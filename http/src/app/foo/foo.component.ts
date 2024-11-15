@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Foo } from './foo.model';
 
 @Component({
  selector: 'foo',
@@ -26,17 +27,6 @@ export class FooComponent{
      this.data = new Object(d);
      this.loading = false;
    }
-
-   /*makeCompactRequest(): void {
-     this.loading = true;
-     this.http
-       .get('https://jsonplaceholder.typicode.com/posts/1')
-       .subscribe(newData => {
-       this.data = newData;
-       this.loading = false;
-       });
-      }
-      */
     makeCompactPost(): void {
       this.loading = true;
       this.http
@@ -51,5 +41,14 @@ export class FooComponent{
         this.data = data;
         this.loading = false;
       });
-    }        
+    }   
+    fooData! : Foo[]; //punto esclamativo perche non è ancora stato inizializzato
+    oFoo! : Observable<Foo[]>;
+    makeTypedRequest() : void{
+      //metodo che faccia una get ma che ritorni un observable
+      //oFoo : Observable<Foo[]>; va dichiarato tra gli attributi della classe
+      this.oFoo = this.http.get<Foo[]>('https://jsonplaceholder.typicode.com/posts');
+      this.oFoo.subscribe(data => {this.fooData = data;});
+    }
+
 }
